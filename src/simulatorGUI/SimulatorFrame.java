@@ -1,14 +1,21 @@
 package simulatorGUI;
 
-
 import java.awt.*;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.sound.sampled.*;
+import java.io.*;
+import java.util.Scanner;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 
 @SuppressWarnings("serial")
-public class SimulatorFrame extends JFrame
+public class SimulatorFrame extends JFrame implements ActionListener
 {
+	protected JButton b1, b2, b3, b4, b5, b6;
+	protected JLabel l1, l2, l3, l4, l5, l6;
+	
+	Scanner input = new Scanner(System.in);
 
 	public SimulatorFrame()
 	{
@@ -18,20 +25,22 @@ public class SimulatorFrame extends JFrame
 		
 		SimulatorPanel panel = new SimulatorPanel();
 		
+		b1 = new JButton("Button 1");
+		b2 = new JButton("Button 2");
+		b3 = new JButton("Button 3");
+		b4 = new JButton("Button 4");
+		b5 = new JButton("Button 5");
+		b6 = new JButton("Button 6");
 		
-		JComponent b1 = new JButton("Button 1");
-		JComponent b2 = new JButton("Button 2");
-		JComponent b3 = new JButton("Button 3");
-		JComponent b4 = new JButton("Button 4");
-		JComponent b5 = new JButton("Button 5");
-		JComponent b6 = new JButton("Button 6");
+		l1 = new JLabel("Label 1");
+		l2 = new JLabel("Label 2");
+		l3 = new JLabel("Label 3");
+		l4 = new JLabel("Label 4");
+		l5 = new JLabel("Label 5");
+		l6 = new JLabel("Label 6");
 		
-		JComponent l1 = new JLabel("Label 1");
-		JComponent l2 = new JLabel("Label 2");
-		JComponent l3 = new JLabel("Label 3");
-		JComponent l4 = new JLabel("Label 4");
-		JComponent l5 = new JLabel("Label 5");
-		JComponent l6 = new JLabel("Label 6");
+		b1.addActionListener(this);
+		b2.addActionListener(this);
 				
 		JPanel pane = new JPanel();
 		
@@ -79,5 +88,42 @@ public class SimulatorFrame extends JFrame
 		setResizable(true);
 		
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
 	
+			if (e.getSource() == b1)
+			{
+				try {
+					AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("C:\\Users\\Bryan\\Desktop\\Outkast - M.s Jackson.wav").getAbsoluteFile());
+					Clip clip = AudioSystem.getClip();
+					clip.open(audioIn);
+					clip.start();
+				} catch (UnsupportedAudioFileException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (LineUnavailableException e1) {
+					e1.printStackTrace();
+				}
+			}
+			
+			if (e.getSource() == b2)
+			{
+				try {
+					AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("C:\\Users\\Bryan\\Desktop\\Kendrick Lamar - King Kunta.wav").getAbsoluteFile());
+					Clip clip = AudioSystem.getClip();
+					clip.open(audioIn);
+					clip.start();
+				} catch (UnsupportedAudioFileException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (LineUnavailableException e1) {
+					e1.printStackTrace();
+				}
+			}
+		input.close();
+	}
 }
