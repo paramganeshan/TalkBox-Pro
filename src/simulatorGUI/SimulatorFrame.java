@@ -21,7 +21,7 @@ public class SimulatorFrame extends JFrame implements ActionListener
 	{
 		super();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(new Dimension(600, 600));
+		setSize(new Dimension(650, 650));
 		
 		SimulatorPanel panel = new SimulatorPanel();
 		

@@ -8,8 +8,8 @@ import javax.swing.*;
 public class SimulatorPanel extends JPanel
 {
 
-	public final int WIDTH = 700;
-	public final int HEIGHT = 700;
+	public final int WIDTH = 650;
+	public final int HEIGHT = 650;
 	
 	public SimulatorPanel() 
 	{
