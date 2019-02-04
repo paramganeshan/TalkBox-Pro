@@ -1,6 +1,9 @@
 package TalkBoxConfigurationGUI;
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.util.*;
+import java.util.List;
 
 public class ConfigrationFrame extends JFrame
 {
@@ -13,13 +16,22 @@ public class ConfigrationFrame extends JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setLayout( new FlowLayout());
+        String path = "Sounds\\";
+        File sounds = new File(path);
+        File[] listOfFiles = sounds.listFiles();
+
+        List<String> fileNames = new ArrayList<String>();
+        for (File f: listOfFiles) {
+            fileNames.add(f.getName().replace(path, ""));
+        }
+
+        JList audioList = new JList(fileNames.toArray());
+        getContentPane().add(new JLabel("Feelings"));
+        getContentPane().add(audioList);
 
         String [] audio = {"Happy", "Sad", "Excited", "Tired","Proud" ,"Sick", };
-        JComboBox audioChoices = new JComboBox(audio);
-        getContentPane().add(new JLabel("Feelings"));
-        getContentPane().add(audioChoices);
 
-        String [] order = {"1", "2", "3", "4", "5", "6"};
+        String [] order = {"1", "2", "3", "4", "5", "6", "+"};
         JComboBox audioOrder = new JComboBox(order);
         getContentPane().add(new JLabel("Order"));
         getContentPane().add(audioOrder);
@@ -29,19 +41,20 @@ public class ConfigrationFrame extends JFrame
         getContentPane().add(edit);
 
 
-        JList initialList = new JList(audio);
+        JList initialList = new JList(fileNames.toArray());
         getContentPane().add(new JLabel("Initial List"));
         getContentPane().add(initialList);
 
-        JList updatedList = new JList(audio);
+        JList updatedList = new JList(fileNames.toArray());
         getContentPane().add(new JLabel("Final List"));
         getContentPane().add(updatedList);
+
+        JButton swap = new JButton();
+        swap.setText("Swap");
+        getContentPane().add(swap);
 
         JButton saveChanges = new JButton();
         saveChanges.setText("Save Changes");
         getContentPane().add(saveChanges);
-
-
-      
     }
 }
