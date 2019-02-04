@@ -17,8 +17,8 @@ public class ConfigrationFrame extends JFrame
 
         setLayout( new FlowLayout());
         String path = "Sounds\\";
-        File file = new File(path);
-        File[] listOfFiles = file.listFiles();
+        File sounds = new File(path);
+        File[] listOfFiles = sounds.listFiles();
 
         List<String> fileNames = new ArrayList<String>();
         for (File f: listOfFiles) {
@@ -41,11 +41,11 @@ public class ConfigrationFrame extends JFrame
         getContentPane().add(edit);
 
 
-        JList initialList = new JList(audio);
+        JList initialList = new JList(fileNames.toArray());
         getContentPane().add(new JLabel("Initial List"));
         getContentPane().add(initialList);
 
-        JList updatedList = new JList(audio);
+        JList updatedList = new JList(fileNames.toArray());
         getContentPane().add(new JLabel("Final List"));
         getContentPane().add(updatedList);
 
