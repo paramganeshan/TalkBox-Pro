@@ -30,9 +30,11 @@ public class ConfigurationAppGUI extends JFrame
     private JList initialList;
     private JList updatedList;
     private JComboBox <Integer> order;
-    DefaultListModel initialListModel;
-    DefaultListModel finalListModel;
-    DefaultListModel audioListModel;
+    private DefaultListModel initialListModel;
+    private DefaultListModel finalListModel;
+    private DefaultListModel audioListModel;
+    private Integer[] orderButtons = {1,2,3,4,5,6};
+    private DefaultComboBoxModel orderModel;
 
     /**
      * Main method for starting the player from a command line.
@@ -213,7 +215,6 @@ public class ConfigurationAppGUI extends JFrame
 
             String[] formats = {"all formats", ".wav", ".au", ".aif"};
 
-
             // Create the combo box.
             JComboBox formatList = new JComboBox(formats);
             formatList.addActionListener(this);
@@ -221,10 +222,7 @@ public class ConfigurationAppGUI extends JFrame
 
             // Create the scrolled list for file names
             audioList = new JList(audioFiles);
-            audioList.setForeground(new Color(140, 171, 226));
-            audioList.setBackground(new Color(0, 0, 0));
-            audioList.setSelectionBackground(new Color(87, 49, 134));
-            audioList.setSelectionForeground(new Color(140, 171, 226));
+            setBackground(audioList);
             JScrollPane scrollPane = new JScrollPane(audioList);
             scrollPane.setColumnHeaderView(new JLabel("Audio files"));
             leftPane.add(scrollPane, BorderLayout.CENTER);
@@ -235,15 +233,32 @@ public class ConfigurationAppGUI extends JFrame
 
         JPanel rightPane = new JPanel();
         {
-            Integer[] orderButtons = {1,2,3,4,5,6};
             //Create the Button # label and comboBox
             JPanel orderPanel = new JPanel();
             {
                 orderPanel.setLayout(new FlowLayout());
                 JLabel orderLabel = new JLabel("Button #: ");
-                order = new JComboBox<Integer>(orderButtons);
+                orderModel = new DefaultComboBoxModel();
+                order = new JComboBox<>(orderModel);
+                for(int i = 1; i <= orderButtons.length; i++)
+                    orderModel.addElement(i);
                 orderPanel.add(orderLabel);
                 orderPanel.add(order);
+
+                //Add Edit button to add audio files to final list.
+                JButton editBtn = new JButton("Edit");
+                editBtn.addActionListener(e -> edit());
+                orderPanel.add(editBtn);
+
+                //Add button to add new button in simulator app.
+                JButton addNewBtn = new JButton("Add button");
+                addNewBtn.addActionListener(e -> { addBtn(orderButtons.length, audioFiles); });
+                orderPanel.add(addNewBtn);
+
+                //Add Record Button to record new audio files.
+                JButton recordBtn = new JButton("Record");
+                recordBtn.addActionListener(e -> { });
+                orderPanel.add(recordBtn);
             }
             rightPane.setLayout(new BorderLayout(8, 8));
             rightPane.add(orderPanel, BorderLayout.CENTER);
@@ -254,21 +269,17 @@ public class ConfigurationAppGUI extends JFrame
             {
                 initialListModel.addElement(audioFiles[i]);
             }
-            initialList.setForeground(new Color(140, 171, 226));
-            initialList.setBackground(new Color(0, 0, 0));
-            initialList.setSelectionBackground(new Color(87, 49, 134));
-            initialList.setSelectionForeground(new Color(140, 171, 226));
+            setBackground(initialList);
             JScrollPane leftScrollPane = new JScrollPane(initialList);
             leftScrollPane.setColumnHeaderView(new JLabel("Initial List"));
             rightPane.add(leftScrollPane, BorderLayout.WEST);
 
             //Create the scrolled list for Updated List
-            updatedList = new JList();
-            updatedList.setForeground(new Color(140, 171, 226));
-            updatedList.setBackground(new Color(0, 0, 0));
-            updatedList.setSelectionBackground(new Color(87, 49, 134));
-            updatedList.setSelectionForeground(new Color(140, 171, 226));
+            finalListModel = new DefaultListModel();
+            updatedList = new JList(finalListModel);
+            setBackground(updatedList);
             JScrollPane rightScrollPane = new JScrollPane(updatedList);
+
             rightScrollPane.setColumnHeaderView(new JLabel("Final List"));
             rightPane.add(rightScrollPane, BorderLayout.EAST);
         }
@@ -300,57 +311,38 @@ public class ConfigurationAppGUI extends JFrame
         }
         contentPane.add(centerPane, BorderLayout.EAST);
 
-
-
-
-
-
         // Create the toolbar with the buttons
         JPanel toolbar = new JPanel();
         {
             toolbar.setLayout(new GridLayout(1, 0));
 
-            JButton button = new JButton("Play");
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { play(); }
-            });
-            toolbar.add(button);
+            JButton playBtn = new JButton("Play");
+            playBtn.addActionListener(e -> play());
+            toolbar.add(playBtn);
 
-            button = new JButton("Stop");
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { stop(); }
-            });
-            toolbar.add(button);
+            JButton stopBtn = new JButton("Stop");
+            stopBtn.addActionListener(e -> stop());
+            toolbar.add(stopBtn);
 
-            button = new JButton("Pause");
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { pause(); }
-            });
-            toolbar.add(button);
+            JButton pauseBtn = new JButton("Pause");
+            pauseBtn.addActionListener(e -> pause());
+            toolbar.add(pauseBtn);
 
-            button = new JButton("Resume");
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { resume(); }
-            });
-            toolbar.add(button);
+            JButton resumeBtn = new JButton("Resume");
+            resumeBtn.addActionListener(e -> {  });
+            toolbar.add(resumeBtn);
 
-            button = new JButton("Edit");
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { resume(); }
-            });
-            toolbar.add(button);
+            JButton resetBtn = new JButton("Reset");
+            resetBtn.addActionListener(e -> { reset(audioFiles); });
+            toolbar.add(resetBtn);
 
-            button = new JButton("Swap");
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { resume(); }
-            });
-            toolbar.add(button);
+            JButton swapBtn = new JButton("Swap");
+            swapBtn.addActionListener(e -> {  });
+            toolbar.add(swapBtn);
 
-            button = new JButton("Save Changes");
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { resume(); }
-            });
-            toolbar.add(button);
+            JButton saveChangesBtn = new JButton("Save Changes");
+            saveChangesBtn.addActionListener(e -> {  });
+            toolbar.add(saveChangesBtn);
         }
 
         contentPane.add(toolbar, BorderLayout.NORTH);
@@ -384,9 +376,7 @@ public class ConfigurationAppGUI extends JFrame
 
         item = new JMenuItem("Quit");
         item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, SHORTCUT_MASK));
-        item.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { quit(); }
-        });
+        item.addActionListener(e -> quit());
         menu.add(item);
 
         // create the Help menu
@@ -394,9 +384,60 @@ public class ConfigurationAppGUI extends JFrame
         menubar.add(menu);
 
         item = new JMenuItem("About TalkBox...");
-        item.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { showAbout(); }
-        });
+        item.addActionListener(e -> showAbout());
         menu.add(item);
+    }
+
+    //Background for the lists that will be used in the GUI
+    private void setBackground(JList list)
+    {
+        list.setForeground(new Color(140, 171, 226));
+        list.setBackground(new Color(0, 0, 0));
+        list.setSelectionBackground(new Color(87, 49, 134));
+        list.setSelectionForeground(new Color(140, 171, 226));
+    }
+
+    //Added the edit button functionality to add audio files to final list.
+    private void edit()
+    {
+        String filename = (String)audioList.getSelectedValue();
+        if(finalListModel.size() < orderButtons.length)
+            if(finalListModel.contains(filename))
+                JOptionPane.showMessageDialog(null, "Sorry the item already exists");
+            else
+                finalListModel.add(order.getSelectedIndex(), filename);
+        else
+            JOptionPane.showMessageDialog(null, "Sorry you have exceeded the number of available buttons, please add a new button, then try.");
+    }
+
+
+    //Added the swap button functionality to swap existing set of audio files with the next set.
+    private void swap()
+    {
+        int numberOfButtons = orderButtons.length;
+        initialListModel.removeAllElements();
+        //for(int i = )
+    }
+
+    //Added the reset button functionality to reset the initial list and final list
+    private void reset(String[] audioFiles)
+    {
+        finalListModel.removeAllElements();
+        initialListModel.removeAllElements();
+        for(int i = 0; i < orderButtons.length; i++)
+        {
+            initialListModel.addElement(audioFiles[i]);
+        }
+    }
+
+    //Added functionality to add button to add new button to simulator app.
+    private void addBtn(int newBtn, String[] audioFiles)
+    {
+        orderModel.addElement(++newBtn);
+        initialListModel.removeAllElements();
+        for(int i = 0; i < newBtn; i++)
+        {
+            initialListModel.addElement(audioFiles[i]);
+        }
     }
 }
