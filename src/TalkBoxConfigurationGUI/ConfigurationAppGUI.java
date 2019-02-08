@@ -8,14 +8,12 @@ import javax.swing.border.*;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import java.io.*;
 /**
- * A simple sound player. To start, create an instance of this class.
+ * A simple TalkBox. To start, create an instance of this class.
  *
- * The sound player can play sound clips in WAV, AU and AIFF formats
- * with standard sample rates.
+ * The TalkBox can play sound clips in WAV, AU and AIFF formats
  */
 public class ConfigurationAppGUI extends JFrame
         implements ChangeListener, ActionListener
@@ -28,27 +26,19 @@ public class ConfigurationAppGUI extends JFrame
     private JLabel infoLabel;
     private SoundEngine player;
     private JList initialList;
-    private JList updatedList;
+    private JList finalList;
     private JComboBox <Integer> order;
     private DefaultListModel initialListModel;
     private DefaultListModel finalListModel;
     private DefaultListModel audioListModel;
-    private Integer[] orderButtons = {1,2,3,4,5,6};
+    private Integer[] orderButtons = {1,2};
     private DefaultComboBoxModel orderModel;
 
-    /**
-     * Main method for starting the player from a command line.
-     */
-    public static void main(String[] args)
-    {
-        ConfigurationAppGUI gui = new ConfigurationAppGUI();
-    }
+    //Main method for starting the player from a command line.
+    public static void main(String[] args){ ConfigurationAppGUI gui = new ConfigurationAppGUI(); }
 
-    /**
-     * Create a TalkBox and display its GUI on screen.
-     */
-    public ConfigurationAppGUI()
-    {
+    //Create a TalkBox and display its GUI on screen.
+    public ConfigurationAppGUI() {
         super("TalkBox");
         player = new SoundEngine();
         String[] audioFileNames = findFiles(AUDIO_DIR, null);
@@ -60,69 +50,38 @@ public class ConfigurationAppGUI extends JFrame
      * selection in the list, or if the selected file is not a sound file,
      * do nothing.
      */
-    private void play()
-    {
+    private void play() {
         String filename = (String)audioList.getSelectedValue();
-        if(filename == null) {  // nothing selected
+        if(filename == null)  // nothing selected
             return;
-        }
         slider.setValue(0);
         boolean successful = player.play(new File(AUDIO_DIR, filename));
-        if(successful) {
+        if(successful)
             showInfo(filename + " (" + player.getDuration() + " seconds)");
-        }
-        else {
+        else
             showInfo("Could not play file - unknown format");
-        }
     }
 
     /**
      * Display information about a selected sound file (name and clip length).
      * @param message The message to display.
      */
-    private void showInfo(String message)
-    {
-        infoLabel.setText(message);
-    }
+    private void showInfo(String message){ infoLabel.setText(message);}
 
-    /**
-     * Stop the currently playing sound file (if there is one playing).
-     */
-    private void stop()
-    {
-        player.stop();
-    }
+    //Stop the currently playing sound file (if there is one playing).
+    private void stop(){ player.stop();}
 
-    /**
-     * Stop the currently playing sound file (if there is one playing).
-     */
-    private void pause()
-    {
-        player.pause();
-    }
+    //Stop the currently playing sound file (if there is one playing).
+    private void pause() { player.pause();}
 
-    /**
-     * Resume a previously suspended sound file.
-     */
-    private void resume()
-    {
-        player.resume();
-    }
+    //Resume a previously suspended sound file.
+    private void resume() { player.resume();}
 
-    /**
-     * Quit function: quit the application.
-     */
-    private void quit()
-    {
-        System.exit(0);
-    }
+    //Quit function: quit the application.
+    private void quit() {System.exit(0);}
 
-
-    /**
-     * About function: show the 'about' box.
-     */
-    private void showAbout()
-    {
+    //About function: show the 'about' box.
+    private void showAbout() {
         JOptionPane.showMessageDialog(this,
                 "TalkBox\n" + VERSION,
                 "About TalkBox",
@@ -140,15 +99,13 @@ public class ConfigurationAppGUI extends JFrame
         File dir = new File(dirName);
         if(dir.isDirectory()) {
             String[] allFiles = dir.list();
-            if(suffix == null) {
+            if(suffix == null)
                 return allFiles;
-            }
             else {
                 List<String> selected = new ArrayList<String>();
                 for(String filename : allFiles) {
-                    if(filename.endsWith(suffix)) {
+                    if(filename.endsWith(suffix))
                         selected.add(filename);
-                    }
                 }
                 return selected.toArray(new String[selected.size()]);
             }
@@ -166,10 +123,7 @@ public class ConfigurationAppGUI extends JFrame
      * when the slider value is changed by the user.
      * @param evt The event details.
      */
-    public void stateChanged(ChangeEvent evt)
-    {
-        player.seek(slider.getValue());
-    }
+    public void stateChanged(ChangeEvent evt){player.seek(slider.getValue());}
 
     // ------- ActionListener interface (for ComboBox) -------
 
@@ -179,13 +133,11 @@ public class ConfigurationAppGUI extends JFrame
      * in the combo box.
      * @param evt The event details.
      */
-    public void actionPerformed(ActionEvent evt)
-    {
+    public void actionPerformed(ActionEvent evt) {
         JComboBox cb = (JComboBox)evt.getSource();
         String format = (String)cb.getSelectedItem();
-        if(format.equals("all formats")) {
+        if(format.equals("all formats"))
             format = null;
-        }
         audioList.setListData(findFiles(AUDIO_DIR, format));
     }
 
@@ -209,8 +161,7 @@ public class ConfigurationAppGUI extends JFrame
         contentPane.setLayout(new BorderLayout(8, 8));
 
         // Create the left side with combobox and scroll list
-        JPanel leftPane = new JPanel();
-        {
+        JPanel leftPane = new JPanel(); {
             leftPane.setLayout(new BorderLayout(8, 8));
 
             String[] formats = {"all formats", ".wav", ".au", ".aif"};
@@ -221,7 +172,10 @@ public class ConfigurationAppGUI extends JFrame
             leftPane.add(formatList, BorderLayout.NORTH);
 
             // Create the scrolled list for file names
-            audioList = new JList(audioFiles);
+            audioListModel = new DefaultListModel();
+            audioList = new JList(audioListModel);
+            for(int i = 0; i < audioFiles.length; i++)
+                audioListModel.addElement(audioFiles[i]);
             setBackground(audioList);
             JScrollPane scrollPane = new JScrollPane(audioList);
             scrollPane.setColumnHeaderView(new JLabel("Audio files"));
@@ -230,12 +184,9 @@ public class ConfigurationAppGUI extends JFrame
         contentPane.add(leftPane, BorderLayout.CENTER);
 
         //Create the right side with the Initial list and Updated list
-
-        JPanel rightPane = new JPanel();
-        {
+        JPanel rightPane = new JPanel(); {
             //Create the Button # label and comboBox
-            JPanel orderPanel = new JPanel();
-            {
+            JPanel orderPanel = new JPanel(); {
                 orderPanel.setLayout(new FlowLayout());
                 JLabel orderLabel = new JLabel("Button #: ");
                 orderModel = new DefaultComboBoxModel();
@@ -246,14 +197,19 @@ public class ConfigurationAppGUI extends JFrame
                 orderPanel.add(order);
 
                 //Add Edit button to add audio files to final list.
-                JButton editBtn = new JButton("Edit");
+                JButton editBtn = new JButton(">|");
                 editBtn.addActionListener(e -> edit());
                 orderPanel.add(editBtn);
 
                 //Add button to add new button in simulator app.
-                JButton addNewBtn = new JButton("Add button");
-                addNewBtn.addActionListener(e -> { addBtn(orderButtons.length, audioFiles); });
+                JButton addNewBtn = new JButton("+");
+                addNewBtn.addActionListener(e -> addBtn(audioFiles));
                 orderPanel.add(addNewBtn);
+
+                //Add remove button to new remove the last button created in simulator app.
+                JButton removeNewBtn = new JButton("-");
+                removeNewBtn.addActionListener(e -> removeBtn());
+                orderPanel.add(removeNewBtn);
 
                 //Add Record Button to record new audio files.
                 JButton recordBtn = new JButton("Record");
@@ -264,11 +220,10 @@ public class ConfigurationAppGUI extends JFrame
             rightPane.add(orderPanel, BorderLayout.CENTER);
             initialListModel = new DefaultListModel();
             initialList = new JList(initialListModel);
+
             // Create the scrolled list for Initial List
-            for(int i = 0; i < orderButtons.length; i++)
-            {
+            for(int i = 0; i < order.getItemCount(); i++)
                 initialListModel.addElement(audioFiles[i]);
-            }
             setBackground(initialList);
             JScrollPane leftScrollPane = new JScrollPane(initialList);
             leftScrollPane.setColumnHeaderView(new JLabel("Initial List"));
@@ -276,9 +231,9 @@ public class ConfigurationAppGUI extends JFrame
 
             //Create the scrolled list for Updated List
             finalListModel = new DefaultListModel();
-            updatedList = new JList(finalListModel);
-            setBackground(updatedList);
-            JScrollPane rightScrollPane = new JScrollPane(updatedList);
+            finalList = new JList(finalListModel);
+            setBackground(finalList);
+            JScrollPane rightScrollPane = new JScrollPane(finalList);
 
             rightScrollPane.setColumnHeaderView(new JLabel("Final List"));
             rightPane.add(rightScrollPane, BorderLayout.EAST);
@@ -286,8 +241,7 @@ public class ConfigurationAppGUI extends JFrame
         contentPane.add(rightPane, BorderLayout.SOUTH);
 
         // Create the center with image, text label, and slider
-        JPanel centerPane = new JPanel();
-        {
+        JPanel centerPane = new JPanel(); {
             centerPane.setLayout(new BorderLayout(8, 8));
 
             JLabel image = new JLabel(new ImageIcon("title.jpg"));
@@ -312,8 +266,7 @@ public class ConfigurationAppGUI extends JFrame
         contentPane.add(centerPane, BorderLayout.EAST);
 
         // Create the toolbar with the buttons
-        JPanel toolbar = new JPanel();
-        {
+        JPanel toolbar = new JPanel(); {
             toolbar.setLayout(new GridLayout(1, 0));
 
             JButton playBtn = new JButton("Play");
@@ -329,19 +282,19 @@ public class ConfigurationAppGUI extends JFrame
             toolbar.add(pauseBtn);
 
             JButton resumeBtn = new JButton("Resume");
-            resumeBtn.addActionListener(e -> {  });
+            resumeBtn.addActionListener(e -> resume());
             toolbar.add(resumeBtn);
 
             JButton resetBtn = new JButton("Reset");
-            resetBtn.addActionListener(e -> { reset(audioFiles); });
+            resetBtn.addActionListener(e -> reset(audioFiles));
             toolbar.add(resetBtn);
 
             JButton swapBtn = new JButton("Swap");
-            swapBtn.addActionListener(e -> {  });
+            swapBtn.addActionListener(e -> swap(audioFiles));
             toolbar.add(swapBtn);
 
             JButton saveChangesBtn = new JButton("Save Changes");
-            saveChangesBtn.addActionListener(e -> {  });
+            saveChangesBtn.addActionListener(e -> saveChanges());
             toolbar.add(saveChangesBtn);
         }
 
@@ -356,11 +309,8 @@ public class ConfigurationAppGUI extends JFrame
         setVisible(true);
     }
 
-    /**
-     * Create the main frame's menu bar.
-     */
-    private void makeMenuBar()
-    {
+    //Create the main frame's menu bar.
+    private void makeMenuBar() {
         final int SHORTCUT_MASK =
                 Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
@@ -389,8 +339,7 @@ public class ConfigurationAppGUI extends JFrame
     }
 
     //Background for the lists that will be used in the GUI
-    private void setBackground(JList list)
-    {
+    private void setBackground(JList list) {
         list.setForeground(new Color(140, 171, 226));
         list.setBackground(new Color(0, 0, 0));
         list.setSelectionBackground(new Color(87, 49, 134));
@@ -398,46 +347,86 @@ public class ConfigurationAppGUI extends JFrame
     }
 
     //Added the edit button functionality to add audio files to final list.
-    private void edit()
-    {
-        String filename = (String)audioList.getSelectedValue();
-        if(finalListModel.size() < orderButtons.length)
-            if(finalListModel.contains(filename))
-                JOptionPane.showMessageDialog(null, "Sorry the item already exists");
+    private void edit() {
+        if(audioList.isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please select an audio from audio list");
+        }
+        else {
+            String filename = (String)audioList.getSelectedValue();
+            if (finalListModel.size() < order.getItemCount())
+                if (finalListModel.contains(filename))
+                    JOptionPane.showMessageDialog(null, "Sorry the item already exists");
+                else
+                    finalListModel.add(order.getSelectedIndex(), filename);
             else
-                finalListModel.add(order.getSelectedIndex(), filename);
-        else
-            JOptionPane.showMessageDialog(null, "Sorry you have exceeded the number of available buttons, please add a new button, then try.");
-    }
-
-
-    //Added the swap button functionality to swap existing set of audio files with the next set.
-    private void swap()
-    {
-        int numberOfButtons = orderButtons.length;
-        initialListModel.removeAllElements();
-        //for(int i = )
-    }
-
-    //Added the reset button functionality to reset the initial list and final list
-    private void reset(String[] audioFiles)
-    {
-        finalListModel.removeAllElements();
-        initialListModel.removeAllElements();
-        for(int i = 0; i < orderButtons.length; i++)
-        {
-            initialListModel.addElement(audioFiles[i]);
+                JOptionPane.showMessageDialog(null, "Sorry you have exceeded the " +
+                        "number of available buttons, please add a new button, then try.");
         }
     }
 
-    //Added functionality to add button to add new button to simulator app.
-    private void addBtn(int newBtn, String[] audioFiles)
-    {
-        orderModel.addElement(++newBtn);
+    //Added the swap button functionality to swap existing set of audio files with the next set.
+    private void swap(String[] audioFiles) {
+        int index = audioListModel.indexOf(initialListModel.firstElement());
+        int length = order.getItemCount();
         initialListModel.removeAllElements();
-        for(int i = 0; i < newBtn; i++)
-        {
+        for(int i = 1; i <= length; i++) {
+            int c = index + i + orderButtons.length - 1;
+            initialListModel.addElement(audioFiles[c]);
+        }
+    }
+
+    //Added the reset button functionality to reset the initial list and final list
+    private void reset(String[] audioFiles) {
+        finalListModel.removeAllElements();
+        initialListModel.removeAllElements();
+        for(int i = 0; i < orderButtons.length; i++)
             initialListModel.addElement(audioFiles[i]);
+        order.removeAllItems();
+        for(int i = 1; i <= orderButtons.length; i++)
+            orderModel.addElement(i);
+    }
+
+    //Added functionality to add button to add new button to simulator app.
+    private void addBtn(String[] audioFiles) {
+        if(orderModel.getSize() < audioFiles.length) {
+            orderModel.addElement(order.getItemCount() + 1);
+            initialListModel.addElement(audioFiles[order.getItemCount() - 1]);
+        }
+        else
+            JOptionPane.showMessageDialog(null, "Sorry you can't add more buttons");
+    }
+
+    //Added functionality to remove button to remove the last created button in simulator app.
+    private void removeBtn() {
+        if(order.getItemCount() > orderButtons.length) {
+            if(finalListModel.size() == initialListModel.size() || finalListModel.size() >= initialListModel.size()) {
+                finalListModel.removeElementAt(order.getItemCount() - 1);
+                orderModel.removeElementAt(order.getItemCount() - 1);
+                initialListModel.removeElementAt(order.getItemCount());
+            }
+            else {
+                orderModel.removeElementAt(order.getItemCount() - 1);
+                initialListModel.removeElementAt(order.getItemCount());
+            }
+        }
+        else
+            JOptionPane.showMessageDialog(null, "Sorry, you can't remove more buttons");
+    }
+    //Added functionality to save changes.
+    private void saveChanges() {
+        if(finalListModel.isEmpty() || finalListModel.size() < initialListModel.size() ) {
+            JOptionPane.showMessageDialog(null, "Sorry, number of buttons should be " +
+                    "equal to the number of files in final list");
+        }
+        else if((finalListModel.toString()).equals(initialListModel.toString())) {
+            JOptionPane.showMessageDialog(null, "Sorry, make different selections as " +
+                    "both final and initial list are same");
+        }
+        else {
+            initialListModel.removeAllElements();
+            for (int i = 0; i < order.getItemCount(); i++) {
+                initialListModel.addElement(finalListModel.getElementAt(i));
+            }
         }
     }
 }
