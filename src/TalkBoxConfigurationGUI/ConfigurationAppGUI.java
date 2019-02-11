@@ -52,14 +52,17 @@ public class ConfigurationAppGUI extends JFrame
      */
     private void play() {
         String filename = (String)audioList.getSelectedValue();
-        if(filename == null)  // nothing selected
+        if(filename == null) {  // nothing selected
             return;
+        }
         slider.setValue(0);
         boolean successful = player.play(new File(AUDIO_DIR, filename));
-        if(successful)
+        if(successful) {
             showInfo(filename + " (" + player.getDuration() + " seconds)");
-        else
+        }
+        else {
             showInfo("Could not play file - unknown format");
+        }
     }
 
     /**
@@ -253,7 +256,20 @@ public class ConfigurationAppGUI extends JFrame
                 ImageIcon recordIcn = new ImageIcon("Icons/Record.png");
                 setButtonIcon(recordBtn, recordIcn);
                 recordBtn.setToolTipText("Record");
-                recordBtn.addActionListener(e -> { });
+                recordBtn.addActionListener(e -> {
+                    recordBtn.setVisible(false);
+                    ImageIcon stopRcdIcn = new ImageIcon("Icons/Stop.png");
+                    JButton stopRcdBtn = new JButton();
+                    setButtonIcon(stopRcdBtn, stopRcdIcn);
+                    stopRcdBtn.setToolTipText("Stop Recording");
+                    stopRcdBtn.addActionListener(e1 -> {
+                        stopRcdBtn.setVisible(false);
+                        recordBtn.setVisible(true);
+                        stopRecording();
+                    });
+                    startRecording();
+                    orderPanel.add(stopRcdBtn);
+                });
                 orderPanel.add(recordBtn);
             }
             rightPane.setLayout(new BorderLayout(8, 8));
@@ -531,8 +547,19 @@ public class ConfigurationAppGUI extends JFrame
             }
         }
     }
-    private void setButtonIcon(JButton button, ImageIcon myIcon1)
-    {
+
+    //Method to start recording
+    private void startRecording() {
+
+    }
+
+    //Method to stop recording
+    private void stopRecording() {
+
+    }
+
+    //Method to set the Button Icon
+    private void setButtonIcon(JButton button, ImageIcon myIcon1) {
         //button.setBackground(Color.black);
         button.setBorderPainted(false);
         button.setBorder(null);
