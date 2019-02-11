@@ -31,7 +31,7 @@ public class ConfigurationAppGUI extends JFrame
     private DefaultListModel initialListModel;
     private DefaultListModel finalListModel;
     private DefaultListModel audioListModel;
-    private Integer[] orderButtons = {1, 2, 3};
+    private Integer[] orderButtons = {1, 2, 3, 4};
     private DefaultComboBoxModel orderModel;
 
     //Main method for starting the player from a command line.
@@ -288,7 +288,7 @@ public class ConfigurationAppGUI extends JFrame
         contentPane.add(rightPane, BorderLayout.SOUTH);
 
         // Create the center with image, text label, and slider
-        /*JPanel centerPane = new JPanel(); {
+        JPanel centerPane = new JPanel(); {
             centerPane.setLayout(new BorderLayout(8, 8));
 
             JLabel image = new JLabel(new ImageIcon("title.jpg"));
@@ -317,7 +317,7 @@ public class ConfigurationAppGUI extends JFrame
             centerPane.add(slider, BorderLayout.SOUTH);
             //centerPane.setBackground(Color.BLACK);
         }
-        contentPane.add(centerPane, BorderLayout.EAST);*/
+        contentPane.add(centerPane, BorderLayout.EAST);
 
         // Create the toolbar with the buttons
         JPanel toolbar = new JPanel(); {

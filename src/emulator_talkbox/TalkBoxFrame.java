@@ -58,10 +58,14 @@ public class TalkBoxFrame extends JFrame implements ActionListener {
 		
 		Box vert1 = Box.createVerticalBox();
 		vert1.add(label1);
-		vert1.add();
+		vert1.add(label2);
+		vert1.add(label3);
+		vert1.add(label4);
+		vert1.add(label5);
+		vert1.add(label6);
 		
 		JPanel pane = new JPanel(new BorderLayout());
-		pane.add(combined, BorderLayout.CENTER);
+		pane.add(vert1, BorderLayout.CENTER);
 		setContentPane(pane);
 		setResizable(false);
 	}
