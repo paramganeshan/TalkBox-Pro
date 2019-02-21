@@ -40,6 +40,7 @@ public class ConfigurationAppGUI extends JFrame
     private DefaultComboBoxModel orderModel;
     Component[] comp;
     int c = 0;
+    JButton playBtn;
 
     //Main method for starting the player from a command line.
     public static void main(String[] args){
@@ -387,7 +388,7 @@ public class ConfigurationAppGUI extends JFrame
         JPanel toolbar = new JPanel(); {
             toolbar.setLayout(new GridLayout(1, 0));
 
-            JButton playBtn = new JButton();
+            playBtn = new JButton();
             ImageIcon playIcn = new ImageIcon("Icons/Play.png");
             playBtn.setToolTipText("Play");
             setButtonIcon(playBtn, playIcn);
