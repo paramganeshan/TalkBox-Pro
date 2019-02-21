@@ -6,6 +6,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -16,10 +19,12 @@ import java.io.*;
  * The TalkBox can play sound clips in WAV, AU and AIFF formats
  */
 public class ConfigurationAppGUI extends JFrame
-        implements ChangeListener, ActionListener
+        implements ChangeListener, ActionListener, TalkBoxConfiguration
 {
     private static final String VERSION = "Version 1.0";
-    private static final String AUDIO_DIR = "Sounds";
+    private static final String AUDIO_DIR = Paths.get(".\\Sounds").toString();
+    //private static final String AUDIO_DIR = new File("/Sounds").toURI().relativize(new File("X:/York 2/EECS2311/TalkBox-Pro/Sounds").toURI()).getPath();
+    private static final String filename = "TalkBoxConfig.txt";
 
     private JList audioList;
     private JSlider slider;
@@ -33,16 +38,55 @@ public class ConfigurationAppGUI extends JFrame
     private DefaultListModel audioListModel;
     private Integer[] orderButtons = {1, 2, 3};
     private DefaultComboBoxModel orderModel;
+    Component[] comp;
+    int c = 0;
 
     //Main method for starting the player from a command line.
-    public static void main(String[] args){ ConfigurationAppGUI gui = new ConfigurationAppGUI(); }
+    public static void main(String[] args){
+        ConfigurationAppGUI gui = new ConfigurationAppGUI();
+    }
 
     //Create a TalkBox and display its GUI on screen.
     public ConfigurationAppGUI() {
         super("TalkBox");
         player = new SoundEngine();
         String[] audioFileNames = findFiles(AUDIO_DIR, null);
+        try {
+            //Deserialization
+            SaveData data = (SaveData) ResourceManager.load(filename);
+            //Populating InitialList from TalkBoxConfig.save file.
+            initialListModel = new DefaultListModel();
+            initialList = new JList(initialListModel);
+
+            for (int i = 0; i < data.finalList.getModel().getSize(); i++)
+                initialListModel.addElement(data.finalList.getModel().getElementAt(i));
+
+            //Populating Order ComboBox from TalkBoxConfig.save file.
+            orderModel = new DefaultComboBoxModel();
+            order = new JComboBox<>(orderModel);
+            for (int i = 0; i < data.order.getModel().getSize(); i++)
+                orderModel.addElement(data.order.getModel().getElementAt(i));
+
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
         makeFrame(audioFileNames);
+
+        //--Testing interface methods.
+//        this.getNumberOfAudioButtons();
+//        this.getNumberOfAudioSets();
+//        this.getTotalNumberOfButtons();
+//        this.getRelativePathToAudioFiles();
+//        this.getAudioFileNames();
     }
 
     /**
@@ -199,10 +243,12 @@ public class ConfigurationAppGUI extends JFrame
 
                 JLabel orderLabel = new JLabel("Button #: ");
                 orderLabel.setFont(font);
-                orderModel = new DefaultComboBoxModel();
-                order = new JComboBox<>(orderModel);
-                for(int i = 1; i <= orderButtons.length; i++)
-                    orderModel.addElement(i);
+                if(orderModel == null) {
+                    orderModel = new DefaultComboBoxModel();
+                    order = new JComboBox<>(orderModel);
+                    for (int i = 1; i <= orderButtons.length; i++)
+                        orderModel.addElement(i);
+                }
                 order.setBackground(Color.BLACK);
                 order.setForeground(new Color(140, 171, 226));
                 orderPanel.add(orderLabel);
@@ -274,12 +320,14 @@ public class ConfigurationAppGUI extends JFrame
             }
             rightPane.setLayout(new BorderLayout(8, 8));
             rightPane.add(orderPanel, BorderLayout.CENTER);
-            initialListModel = new DefaultListModel();
-            initialList = new JList(initialListModel);
-
             // Create the scrolled list for Initial List
-            for(int i = 0; i < order.getItemCount(); i++)
-                initialListModel.addElement(audioFiles[i]);
+            if(initialListModel == null)
+            {
+                initialListModel = new DefaultListModel();
+                initialList = new JList(initialListModel);
+                for (int i = 0; i < order.getItemCount(); i++)
+                    initialListModel.addElement(audioFiles[i]);
+            }
             setBackground(initialList);
             initialList.setPrototypeCellValue("XXXXXXXXXXXXXXXXXXX");
             JScrollPane leftScrollPane = new JScrollPane(initialList);
@@ -463,7 +511,10 @@ public class ConfigurationAppGUI extends JFrame
 
     private void removeFinalBtn()
     {
-        if (finalListModel.size() <= orderButtons.length)
+//        if (finalListModel.size() <= orderButtons.length)
+//            JOptionPane.showMessageDialog(null, "Cannot remove more buttons");
+//        else
+        if (finalListModel.size() <= 0)
             JOptionPane.showMessageDialog(null, "Cannot remove more buttons");
         else
             if(finalListModel.size() <= order.getSelectedIndex())
@@ -508,7 +559,12 @@ public class ConfigurationAppGUI extends JFrame
         int index = audioListModel.indexOf(initialListModel.lastElement());
         if(orderModel.getSize() < audioFiles.length) {
             orderModel.addElement(order.getItemCount() + 1);
-            initialListModel.addElement(audioFiles[++index]);
+            if(++index == audioListModel.size()) {
+                index = -1;
+                initialListModel.addElement(audioFiles[++index]);
+            }
+            else
+                initialListModel.addElement(audioFiles[++index]);
         }
         else
             JOptionPane.showMessageDialog(null, "Sorry you can't add more buttons");
@@ -541,6 +597,28 @@ public class ConfigurationAppGUI extends JFrame
                     "both final and initial list are same");
         }
         else {
+            //Serialization
+            SaveData data = new SaveData();
+            data.finalList = new JList(finalListModel);
+            data.order = new JComboBox(orderModel);
+            data.numberOfAudioButtons = this.getNumberOfAudioButtons();
+            System.out.println(data.numberOfAudioButtons);
+            data.numberOfAudioSets = this.getNumberOfAudioSets();
+            System.out.println(data.numberOfAudioSets);
+            data.totalNumberOfButtons = this.getTotalNumberOfButtons();
+            System.out.println(data.totalNumberOfButtons);
+            c = 0;
+            data.relativePathToAudioFiles = this.getRelativePathToAudioFiles().toString();
+            System.out.println(data.relativePathToAudioFiles);
+            data.audioFileNames = this.getAudioFileNames();
+            System.out.println(Arrays.deepToString(data.audioFileNames).replace("], ", "]\n"));
+            try {
+                ResourceManager.save(data, filename);
+            }
+            catch (Exception e)
+            {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
             initialListModel.removeAllElements();
             for (int i = 0; i < order.getItemCount(); i++) {
                 initialListModel.addElement(finalListModel.getElementAt(i));
@@ -567,5 +645,70 @@ public class ConfigurationAppGUI extends JFrame
         button.setMargin(new Insets(0, 0, 0, 0));
         button.setContentAreaFilled(false);
         button.setIcon(myIcon1);
+    }
+
+    @Override
+    public int getNumberOfAudioButtons() {
+        int audioButtonCount = order.getItemCount();
+        //System.out.println(audioButtonCount);
+        return audioButtonCount;
+    }
+
+    @Override
+    public int getNumberOfAudioSets() {
+        int audioSetsCount = audioListModel.size() / order.getItemCount();
+        //System.out.println(audioSetsCount);
+        return audioSetsCount;
+    }
+
+    @Override
+    public int getTotalNumberOfButtons() {
+        if (comp == null) {
+            comp = getContentPane().getComponents();
+        }
+        for (Component container : comp) {
+            if (container instanceof JButton)
+                c++;
+            else if (container instanceof JPanel) {
+                comp = ((JPanel) container).getComponents();
+                getTotalNumberOfButtons();
+            }
+        }
+        comp = null;
+        System.out.println("c is: " + c);
+        return c;
+    }
+
+    @Override
+    public Path getRelativePathToAudioFiles() {
+        Path path1 = Paths.get(".\\Sounds");
+        //System.out.println(path1);
+        return path1;
+    }
+
+    @Override
+    public String[][] getAudioFileNames() {
+        int rows = this.getNumberOfAudioSets();
+        int columns = this.getNumberOfAudioButtons();
+        String[][] audioFileNames= new String[rows][columns];
+        int counter = 0;
+        if(audioListModel.size() % columns != 0) {
+            rows++;
+            audioFileNames = new String[rows][columns];
+        }
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < columns; j++) {
+                    if (counter == audioListModel.size()) {
+                        counter = 0;
+                        audioFileNames[i][j] = (String) audioList.getModel().getElementAt(counter);
+                        counter++;
+                    } else {
+                        audioFileNames[i][j] = (String) audioList.getModel().getElementAt(counter);
+                        counter++;
+                    }
+                }
+            }
+        //System.out.println(Arrays.deepToString(audioFileNames).replace("], ", "]\n"));
+        return audioFileNames;
     }
 }
