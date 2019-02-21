@@ -25,6 +25,8 @@ public class SimulatorFrame extends JFrame implements ActionListener
 		
 		SimulatorPanel panel = new SimulatorPanel();
 		
+		
+		
 		b1 = new JButton("Button 1");
 		b2 = new JButton("Button 2");
 		b3 = new JButton("Button 3");
@@ -95,8 +97,8 @@ public class SimulatorFrame extends JFrame implements ActionListener
 	
 			if (e.getSource() == b1)
 			{
-				try {
-					AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("C:\\Users\\Bryan\\Desktop\\Outkast - M.s Jackson.wav").getAbsoluteFile());
+				/*try {
+					AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("").getAbsoluteFile());
 					Clip clip = AudioSystem.getClip();
 					clip.open(audioIn);
 					clip.start();
@@ -106,23 +108,23 @@ public class SimulatorFrame extends JFrame implements ActionListener
 					e1.printStackTrace();
 				} catch (LineUnavailableException e1) {
 					e1.printStackTrace();
-				}
+				}*/
 			}
 			
 			if (e.getSource() == b2)
 			{
-				try {
-					AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("C:\\Users\\Bryan\\Desktop\\Kendrick Lamar - King Kunta.wav").getAbsoluteFile());
-					Clip clip = AudioSystem.getClip();
-					clip.open(audioIn);
-					clip.start();
-				} catch (UnsupportedAudioFileException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				} catch (LineUnavailableException e1) {
-					e1.printStackTrace();
-				}
+				/*try {
+				AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("").getAbsoluteFile());
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioIn);
+				clip.start();
+			} catch (UnsupportedAudioFileException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (LineUnavailableException e1) {
+				e1.printStackTrace();
+			}*/
 			}
 		input.close();
 	}

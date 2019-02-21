@@ -1,15 +1,24 @@
 package TalkBoxConfigurationGUI;
 
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.*;
+
+import javax.sound.sampled.AudioInputStream;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import simulatorGUI.SimulatorApp;
+import simulatorGUI.SimulatorFrame;
+
 import javax.swing.border.*;
 
 import java.util.List;
 import java.util.ArrayList;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 /**
  * A simple TalkBox. To start, create an instance of this class.
  *
@@ -18,7 +27,11 @@ import java.io.*;
 public class ConfigurationAppGUI extends JFrame
         implements ChangeListener, ActionListener
 {
-    private static final String VERSION = "Version 1.0";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 79419221876254667L;
+	private static final String VERSION = "Version 1.0";
     private static final String AUDIO_DIR = "Sounds";
 
     private JList audioList;
@@ -29,10 +42,11 @@ public class ConfigurationAppGUI extends JFrame
     private JList finalList;
     private JComboBox <Integer> order;
     private DefaultListModel initialListModel;
-    private DefaultListModel finalListModel;
+    public DefaultListModel finalListModel;
     private DefaultListModel audioListModel;
     private Integer[] orderButtons = {1, 2, 3, 4};
     private DefaultComboBoxModel orderModel;
+    
 
     //Main method for starting the player from a command line.
     public static void main(String[] args){ ConfigurationAppGUI gui = new ConfigurationAppGUI(); }
@@ -271,6 +285,21 @@ public class ConfigurationAppGUI extends JFrame
                     orderPanel.add(stopRcdBtn);
                 });
                 orderPanel.add(recordBtn);
+                
+                //New jButton launches Simulator
+                //Need to stream data to Sounds folder, into objdata.tbc
+                JButton launchSimApp = new JButton("Launch Simulator");
+                launchSimApp.addActionListener(e ->  {
+                	/*try {
+						ObjectOutputStream objOutStream = new ObjectOutputStream(new FileOutputStream("objdata.tbc"));
+						objOutStream.writeObject(new TalkBoxConfigurationClass());
+					} catch (IOException e1) {
+						System.out.println(e1.getMessage());
+					}*/
+                	SimulatorFrame myFrame = new SimulatorFrame();
+            		myFrame.setVisible(true);
+                });
+                orderPanel.add(launchSimApp);
             }
             rightPane.setLayout(new BorderLayout(8, 8));
             rightPane.add(orderPanel, BorderLayout.CENTER);
@@ -568,4 +597,56 @@ public class ConfigurationAppGUI extends JFrame
         button.setContentAreaFilled(false);
         button.setIcon(myIcon1);
     }
+    
+    /*
+     * IMPORTANT: We do not have specific sets of audio.
+     * Right now, this just puts the audio from the final list
+     * to the the buttons in the simApp
+     * */
+    //This is an inner/nested class
+	public class TalkBoxConfigurationClass implements TalkBoxConfiguration {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -2042119112178247839L;
+		AudioInputStream[] audioInFinal;
+		Path sounds = Paths.get("Sounds");
+		/*public TalkBoxConfigurationClass() {
+			for (int i = 0; i < finalListModel.size(); i++) {
+				for (int j = 0; j < ; j++) {
+					
+				}
+			}
+		}*/
+		@Override
+		public int getNumberOfAudioButtons() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public int getNumberOfAudioSets() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public int getTotalNumberOfButtons() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public Path getRelativePathToAudioFiles() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String[][] getAudioFileNames() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
 }
