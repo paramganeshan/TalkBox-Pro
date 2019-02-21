@@ -34,7 +34,7 @@ public class ConfigurationAppGUI extends JFrame
     private JList finalList;
     private JComboBox <Integer> order;
     private DefaultListModel initialListModel;
-    private DefaultListModel finalListModel;
+    private DefaultListModel finalListModel; 
     private DefaultListModel audioListModel;
     private Integer[] orderButtons = {1, 2, 3};
     private DefaultComboBoxModel orderModel;
@@ -141,7 +141,7 @@ public class ConfigurationAppGUI extends JFrame
      * @param suffix File suffix of interest.
      * @return The names of files found.
      */
-    private String[] findFiles(String dirName, String suffix)
+    public String[] findFiles(String dirName, String suffix)
     {
         File dir = new File(dirName);
         if(dir.isDirectory()) {
