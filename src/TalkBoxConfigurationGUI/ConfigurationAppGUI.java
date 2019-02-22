@@ -212,6 +212,7 @@ public class ConfigurationAppGUI extends JFrame
         contentPane.setBorder(new EmptyBorder(6, 10, 10, 10));
         contentPane.setPreferredSize(new Dimension(920, 500));
         makeMenuBar();
+        //
 
         // Specify the layout manager with nice spacing
         contentPane.setLayout(new BorderLayout(8, 8));
