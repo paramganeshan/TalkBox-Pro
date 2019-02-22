@@ -26,7 +26,7 @@ public class ConfigurationAppGUI extends JFrame
     //private static final String AUDIO_DIR = new File("/Sounds").toURI().relativize(new File("X:/York 2/EECS2311/TalkBox-Pro/Sounds").toURI()).getPath();
     private static final String filename = "TalkBoxConfig.txt";
 
-    private JList audioList;
+    JList audioList;
     private JSlider slider;
     private JLabel infoLabel;
     private SoundEngine player;
@@ -41,6 +41,12 @@ public class ConfigurationAppGUI extends JFrame
     Component[] comp;
     int c = 0;
     JButton playBtn;
+    JButton stopBtn;
+    JButton pauseBtn;
+    JButton resumeBtn;
+    JButton resetBtn;
+    JButton swapBtn;
+    JButton saveChangesBtn;
 
     //Main method for starting the player from a command line.
     public static void main(String[] args){
@@ -54,7 +60,7 @@ public class ConfigurationAppGUI extends JFrame
         String[] audioFileNames = findFiles(AUDIO_DIR, null);
         try {
             //Deserialization
-            SaveData data = (SaveData) ResourceManager.load(filename);
+            SaveData data = (SaveData)ResourceManager.load(filename); 
             //Populating InitialList from TalkBoxConfig.save file.
             initialListModel = new DefaultListModel();
             initialList = new JList(initialListModel);
@@ -78,7 +84,7 @@ public class ConfigurationAppGUI extends JFrame
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            //JOptionPane.showMessageDialog(null, e.getMessage());
         }
         makeFrame(audioFileNames);
 
@@ -95,7 +101,7 @@ public class ConfigurationAppGUI extends JFrame
      * selection in the list, or if the selected file is not a sound file,
      * do nothing.
      */
-    private void play() {
+    public void play() {
         String filename = (String)audioList.getSelectedValue();
         if(filename == null) {  // nothing selected
             return;
@@ -395,42 +401,42 @@ public class ConfigurationAppGUI extends JFrame
             playBtn.addActionListener(e -> play());
             toolbar.add(playBtn);
 
-            JButton stopBtn = new JButton();
+            stopBtn = new JButton();
             ImageIcon stopIcn = new ImageIcon("Icons/Stop.png");
             setButtonIcon(stopBtn, stopIcn);
             stopBtn.setToolTipText("Stop");
             stopBtn.addActionListener(e -> stop());
             toolbar.add(stopBtn);
 
-            JButton pauseBtn = new JButton();
+            pauseBtn = new JButton();
             ImageIcon pauseIcn = new ImageIcon("Icons/Pause.png");
             setButtonIcon(pauseBtn, pauseIcn);
             pauseBtn.setToolTipText("Pause");
             pauseBtn.addActionListener(e -> pause());
             toolbar.add(pauseBtn);
 
-            JButton resumeBtn = new JButton();
+            resumeBtn = new JButton();
             ImageIcon resumeIcn = new ImageIcon("Icons/Play.png");
             setButtonIcon(resumeBtn, resumeIcn);
             resumeBtn.setToolTipText("Resume");
             resumeBtn.addActionListener(e -> resume());
             toolbar.add(resumeBtn);
 
-            JButton resetBtn = new JButton();
+            resetBtn = new JButton();
             ImageIcon resetIcn = new ImageIcon("Icons/Reset.png");
             setButtonIcon(resetBtn, resetIcn);
             resetBtn.setToolTipText("Reset");
             resetBtn.addActionListener(e -> reset(audioFiles));
             toolbar.add(resetBtn);
 
-            JButton swapBtn = new JButton();
+            swapBtn = new JButton();
             ImageIcon swapIcn = new ImageIcon("Icons/Swap.png");
             setButtonIcon(swapBtn, swapIcn);
             swapBtn.setToolTipText("Swap");
             swapBtn.addActionListener(e -> swap(audioFiles));
             toolbar.add(swapBtn);
 
-            JButton saveChangesBtn = new JButton();
+            saveChangesBtn = new JButton();
             ImageIcon saveChangesIcn = new ImageIcon("Icons/Save.png");
             setButtonIcon(saveChangesBtn, saveChangesIcn);
             saveChangesBtn.setToolTipText("Save Changes");

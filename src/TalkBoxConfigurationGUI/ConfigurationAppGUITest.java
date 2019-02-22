@@ -12,6 +12,7 @@ class ConfigurationAppGUITest {
 	
 	ConfigurationAppGUI gui = new ConfigurationAppGUI();
 	SoundEngine player;
+	TalkBoxConfiguration talkbox;
 
 	@BeforeEach 
 	public void setUp() throws Exception {
@@ -77,13 +78,48 @@ class ConfigurationAppGUITest {
 	@Test
 	public void testClickPlayButton() throws InterruptedException {
 		Thread.sleep(1000);
+		gui.audioList.setSelectedIndex(0);
 		gui.playBtn.doClick();
 		Thread.sleep(1000);
 	}
 	
 	@Test
-	void testClickStopButton() {
-		
+	public void testClickStopButton() throws InterruptedException {
+		Thread.sleep(1000);
+		gui.audioList.setSelectedIndex(1);
+		gui.playBtn.doClick();
+		Thread.sleep(700);
+		gui.stopBtn.doClick();
+		Thread.sleep(1000);
+	}
+	
+	@Test
+	public void testClickPauseButton() throws InterruptedException {
+		Thread.sleep(100);
+		gui.audioList.setSelectedIndex(1);
+		gui.playBtn.doClick();
+		Thread.sleep(700);
+		gui.pauseBtn.doClick();
+		Thread.sleep(100);
+	}
+	
+	@Test
+	public void testClickResumeButton() throws InterruptedException {
+		Thread.sleep(100);
+		gui.audioList.setSelectedIndex(2);
+		gui.playBtn.doClick();
+		Thread.sleep(600);
+		gui.pauseBtn.doClick();
+		Thread.sleep(500);
+		gui.resumeBtn.doClick();
+		Thread.sleep(100);
+	}
+	
+	@Test
+	public void testClickResetButton() throws InterruptedException {
+		Thread.sleep(100);
+		gui.resetBtn.doClick();
+		Thread.sleep(100);
 	}
 
 }
