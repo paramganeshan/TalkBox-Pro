@@ -1,6 +1,8 @@
 package TalkBoxConfigurationGUI;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
+
 
 import java.io.File;
 import java.lang.String;
@@ -78,7 +80,6 @@ class ConfigurationAppGUITest {
 	@Test
 	public void testClickPlayButton() throws InterruptedException {
 		Thread.sleep(1000);
-		gui.audioList.setSelectedIndex(0);
 		gui.playBtn.doClick();
 		Thread.sleep(1000);
 	}

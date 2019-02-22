@@ -557,7 +557,7 @@ public class ConfigurationAppGUI extends JFrame
     }
 
     //Added the swap button functionality to swap existing set of audio files with the next set.
-    private void swap(String[] audioFiles) {
+    public void swap(String[] audioFiles) {
         int index = audioListModel.indexOf(finalListModel.lastElement());
         int j = audioListModel.indexOf(audioListModel.lastElement());
         int length = order.getItemCount();
@@ -577,7 +577,7 @@ public class ConfigurationAppGUI extends JFrame
     }
 
     //Added the reset button functionality to reset the initial list and final list
-    private void reset(String[] audioFiles) {
+    public void reset(String[] audioFiles) {
         finalListModel.removeAllElements();
         initialListModel.removeAllElements();
         order.removeAllItems();
