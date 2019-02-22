@@ -11,7 +11,6 @@ import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class SimulatorApp extends JFrame
 		implements TalkBoxConfiguration {
@@ -23,6 +22,7 @@ public class SimulatorApp extends JFrame
 	private SoundEngine player;
 	JButton[] audioButtons;
 	JButton[] swapButtons;
+	JButton defaultChanges;
 	JList finalAudioList;
 	int numberOfAudioButtons;
 	int numberOfAudioSets;
@@ -67,10 +67,9 @@ public class SimulatorApp extends JFrame
 	public void makeFrame() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		JPanel contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(6, 10, 10, 10));
 		JPanel audio = new JPanel();
 		JPanel swap = new JPanel();
-		contentPane.setBorder(new EmptyBorder(6, 10, 10, 10));
-		contentPane.setSize(new Dimension(800, 800));
 		contentPane.setLayout(new BorderLayout());
 		//Add audio Buttons
 		for(int i = 0; i < numberOfAudioButtons; i++) {
@@ -84,6 +83,9 @@ public class SimulatorApp extends JFrame
 		}
 		contentPane.add(audio, BorderLayout.NORTH);
 		//Add Swap Buttons
+		defaultChanges = new JButton("Default Changes");
+		defaultChanges.addActionListener(e -> defaultChanges());
+		swap.add(defaultChanges);
 		for(int i = 0; i < numberOfAudioSets; i++){
 			swapButtons[i] = new JButton("Swap: " + (i + 1));
 			int k = i;
@@ -92,18 +94,25 @@ public class SimulatorApp extends JFrame
 		}
 		contentPane.add(swap, BorderLayout.CENTER);
 		getContentPane().add(contentPane);
+		pack();
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation(d.width/2 - getWidth()/2, d.height/2 - getHeight()/2);
-		pack();
 		setVisible(true);
 	}
 
 	public void getSwapAudioSets(int k)
 	{
-		System.out.println(Arrays.deepToString(audioFileNames).replace("], ", "]\n"));
-		for(int i = 0; i < audioFileNames[0].length; i++) {
+		for(int i = 0; i < audioButtons.length; i++) {
 			audioButtons[i].setText(audioFileNames[k][i]);
 		}
+		pack();
+	}
+
+	public void defaultChanges()
+	{
+		for(int i = 0; i < numberOfAudioButtons; i++)
+			audioButtons[i].setText(finalAudioList.getModel().getElementAt(i).toString());
+		pack();
 	}
 
 	@Override

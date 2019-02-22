@@ -57,6 +57,7 @@ public class ConfigurationAppGUI extends JFrame
         player = new SoundEngine();
         String[] audioFileNames = findFiles(AUDIO_DIR, null);
         try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //Deserialization
             SaveData data = (SaveData) ResourceManager.load(fileName);
             //Populating InitialList from TalkBoxConfig.save file.
@@ -72,7 +73,6 @@ public class ConfigurationAppGUI extends JFrame
             for (int i = 0; i < data.order.getModel().getSize(); i++)
                 orderModel.addElement(data.order.getModel().getElementAt(i));
 
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -282,8 +282,6 @@ public class ConfigurationAppGUI extends JFrame
                 removeNewBtn.setToolTipText("Remove from Initial List");
                 removeNewBtn.addActionListener(e -> removeInitialBtn());
                 orderPanel.add(removeNewBtn);
-
-
                 //orderPanel.setBackground(Color.BLACK);
 
                 JLabel finalLabel = new JLabel("Final List: ");
@@ -351,7 +349,7 @@ public class ConfigurationAppGUI extends JFrame
             setBackground(initialList);
             initialList.setPrototypeCellValue("XXXXXXXXXXXXXXXXXXX");
             JScrollPane leftScrollPane = new JScrollPane(initialList);
-            leftScrollPane.setColumnHeaderView(new JLabel("Initial List"));
+            leftScrollPane.setColumnHeaderView(new JLabel("Initial List : What You Had"));
             rightPane.add(leftScrollPane, BorderLayout.WEST);
 
             //Create the scrolled list for Updated List
@@ -365,7 +363,7 @@ public class ConfigurationAppGUI extends JFrame
             for (int i=0; i<initialListModel.getSize(); i++)
                 finalListModel.addElement(initialListModel.elementAt(i));
 
-            rightScrollPane.setColumnHeaderView(new JLabel("Final List"));
+            rightScrollPane.setColumnHeaderView(new JLabel("Final List : What You Want"));
             rightPane.add(rightScrollPane, BorderLayout.EAST);
             //rightPane.setBackground(Color.BLACK);
         }
@@ -612,38 +610,44 @@ public class ConfigurationAppGUI extends JFrame
             JOptionPane.showMessageDialog(null, "Sorry, number of buttons should be " +
                     "equal to the number of files in final list");
         }
-        else if((finalListModel.toString()).equals(initialListModel.toString())) {
-            JOptionPane.showMessageDialog(null, "Sorry, make different selections as " +
-                    "both final and initial list are same");
-        }
+//        else if((finalListModel.toString()).equals(initialListModel.toString())) {
+//            JOptionPane.showMessageDialog(null, "Sorry, make different selections as " +
+//                    "both final and initial list are same");
+//        }
         else {
-            //Serialization
-            SaveData data = new SaveData();
-            data.finalList = new JList(finalListModel);
-            data.order = new JComboBox(orderModel);
-            data.numberOfAudioButtons = this.getNumberOfAudioButtons();
-            System.out.println(data.numberOfAudioButtons);
-            data.numberOfAudioSets = this.getNumberOfAudioSets();
-            System.out.println(data.numberOfAudioSets);
-            data.totalNumberOfButtons = this.getTotalNumberOfButtons();
-            System.out.println(data.totalNumberOfButtons);
-            c = 0;
-            data.relativePathToAudioFiles = this.getRelativePathToAudioFiles().toString();
-            System.out.println(data.relativePathToAudioFiles);
-            data.audioFileNames = this.getAudioFileNames();
-            System.out.println(Arrays.deepToString(data.audioFileNames).replace("], ", "]\n"));
-            try {
-                ResourceManager.save(data, fileName);
-            }
-            catch (Exception e)
-            {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
+            save();
             initialListModel.removeAllElements();
             for (int i = 0; i < order.getItemCount(); i++) {
                 initialListModel.addElement(finalListModel.getElementAt(i));
             }
         }
+    }
+
+    public void save()
+    {
+        //Serialization
+        SaveData data = new SaveData();
+        data.finalList = new JList(finalListModel);
+        data.order = new JComboBox(orderModel);
+        data.numberOfAudioButtons = this.getNumberOfAudioButtons();
+        System.out.println(data.numberOfAudioButtons);
+        data.numberOfAudioSets = this.getNumberOfAudioSets();
+        System.out.println(data.numberOfAudioSets);
+        data.totalNumberOfButtons = this.getTotalNumberOfButtons();
+        System.out.println(data.totalNumberOfButtons);
+        c = 0;
+        data.relativePathToAudioFiles = this.getRelativePathToAudioFiles().toString();
+        System.out.println(data.relativePathToAudioFiles);
+        data.audioFileNames = this.getAudioFileNames();
+        System.out.println(Arrays.deepToString(data.audioFileNames).replace("], ", "]\n"));
+        try {
+            ResourceManager.save(data, fileName);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
     }
 
     //Method to start recording
@@ -665,6 +669,7 @@ public class ConfigurationAppGUI extends JFrame
         button.setMargin(new Insets(0, 0, 0, 0));
         button.setContentAreaFilled(false);
         button.setIcon(myIcon1);
+        button.setOpaque(false);
     }
 
     @Override
