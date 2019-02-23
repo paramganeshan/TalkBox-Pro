@@ -45,6 +45,7 @@ public class ConfigurationAppGUI extends JFrame
     private DefaultComboBoxModel orderModel;
     Component[] comp;
     int c = 0;
+    File sounds = new File(fileName);
 
     //Main method for starting the player from a command line.
     public static void main(String[] args){
@@ -58,6 +59,7 @@ public class ConfigurationAppGUI extends JFrame
         String[] audioFileNames = findFiles(AUDIO_DIR, null);
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+<<<<<<< HEAD
             //Deserialization
             SaveData data = (SaveData) ResourceManager.load(fileName);
             //Populating InitialList from TalkBoxConfig.save file.
@@ -66,13 +68,27 @@ public class ConfigurationAppGUI extends JFrame
 
             for (int i = 0; i < data.finalList.getModel().getSize(); i++)
                 initialListModel.addElement(data.finalList.getModel().getElementAt(i));
+=======
+            if(sounds.exists()) {
+                //Deserialization
+                SaveData data = (SaveData) ResourceManager.load(fileName);
+                //Populating InitialList from TalkBoxConfig.save file.
+                initialListModel = new DefaultListModel();
+                initialList = new JList(initialListModel);
+>>>>>>> Dhruv
 
-            //Populating Order ComboBox from TalkBoxConfig.save file.
-            orderModel = new DefaultComboBoxModel();
-            order = new JComboBox<>(orderModel);
-            for (int i = 0; i < data.order.getModel().getSize(); i++)
-                orderModel.addElement(data.order.getModel().getElementAt(i));
+                for (int i = 0; i < data.finalList.getModel().getSize(); i++)
+                    initialListModel.addElement(data.finalList.getModel().getElementAt(i));
 
+<<<<<<< HEAD
+=======
+                //Populating Order ComboBox from TalkBoxConfig.save file.
+                orderModel = new DefaultComboBoxModel();
+                order = new JComboBox<>(orderModel);
+                for (int i = 0; i < data.order.getModel().getSize(); i++)
+                    orderModel.addElement(data.order.getModel().getElementAt(i));
+            }
+>>>>>>> Dhruv
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -92,10 +108,6 @@ public class ConfigurationAppGUI extends JFrame
 //        this.getTotalNumberOfButtons();
 //        this.getRelativePathToAudioFiles();
 //        this.getAudioFileNames();
-    }
-
-    public JLabel getInfoLabel() {
-        return infoLabel;
     }
 
     /**
@@ -330,9 +342,14 @@ public class ConfigurationAppGUI extends JFrame
                 setButtonIcon(launchSimApp, launchIcn);
                 launchSimApp.setToolTipText("Launch Simulator");
                 launchSimApp.addActionListener(e ->  {
-                    SimulatorApp myFrame = new SimulatorApp();
-                    myFrame.setVisible(true);
-                    myFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                    if(sounds.exists()) {
+                        SimulatorApp myFrame = new SimulatorApp();
+                        myFrame.setVisible(true);
+                        myFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Please try to save before launching simulator app");
+                    }
                 });
                 orderPanel.add(launchSimApp);
             }
