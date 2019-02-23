@@ -59,36 +59,22 @@ public class ConfigurationAppGUI extends JFrame
         String[] audioFileNames = findFiles(AUDIO_DIR, null);
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-<<<<<<< HEAD
-            //Deserialization
-            SaveData data = (SaveData) ResourceManager.load(fileName);
-            //Populating InitialList from TalkBoxConfig.save file.
-            initialListModel = new DefaultListModel();
-            initialList = new JList(initialListModel);
-
-            for (int i = 0; i < data.finalList.getModel().getSize(); i++)
-                initialListModel.addElement(data.finalList.getModel().getElementAt(i));
-=======
             if(sounds.exists()) {
                 //Deserialization
                 SaveData data = (SaveData) ResourceManager.load(fileName);
                 //Populating InitialList from TalkBoxConfig.save file.
                 initialListModel = new DefaultListModel();
                 initialList = new JList(initialListModel);
->>>>>>> Dhruv
 
                 for (int i = 0; i < data.finalList.getModel().getSize(); i++)
                     initialListModel.addElement(data.finalList.getModel().getElementAt(i));
 
-<<<<<<< HEAD
-=======
                 //Populating Order ComboBox from TalkBoxConfig.save file.
                 orderModel = new DefaultComboBoxModel();
                 order = new JComboBox<>(orderModel);
                 for (int i = 0; i < data.order.getModel().getSize(); i++)
                     orderModel.addElement(data.order.getModel().getElementAt(i));
             }
->>>>>>> Dhruv
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
