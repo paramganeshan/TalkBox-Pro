@@ -28,6 +28,7 @@ public class SimulatorApp extends JFrame
 	int numberOfAudioSets;
 	int totalNumberOfButtons;
 	String[][] audioFileNames;
+	File sounds = new File(fileName);
 
 	public static void main(String[] args) 
 	{
@@ -37,17 +38,24 @@ public class SimulatorApp extends JFrame
 		super("TalkBox");
 		player = new SoundEngine();
 		try {
-			//Deserialization
-			ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(Paths.get(fileName)));
-			SaveData data = (SaveData) ois.readObject();
-
-			//Reading values from TalkBoxConfig file.
-			finalAudioList = data.finalList;
-			numberOfAudioButtons = data.numberOfAudioButtons;
-			numberOfAudioSets = data.numberOfAudioSets;
-			totalNumberOfButtons = data.totalNumberOfButtons;
-			audioFileNames = data.audioFileNames;
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+			if(sounds.exists()) {
+				//Deserialization
+				ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(Paths.get(fileName)));
+				SaveData data = (SaveData) ois.readObject();
+
+				//Reading values from TalkBoxConfig file.
+				finalAudioList = data.finalList;
+				numberOfAudioButtons = data.numberOfAudioButtons;
+				numberOfAudioSets = data.numberOfAudioSets;
+				totalNumberOfButtons = data.totalNumberOfButtons;
+				audioFileNames = data.audioFileNames;
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Please try to save from configuration " +
+						"app, before launching simulator app");
+				System.exit(0);
+			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
