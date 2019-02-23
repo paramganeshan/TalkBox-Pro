@@ -38,8 +38,8 @@ public class ConfigurationAppGUI extends JFrame
     private JList initialList;
     private JList finalList;
     private JComboBox <Integer> order;
-    private DefaultListModel initialListModel;
-    private DefaultListModel finalListModel; 
+    DefaultListModel initialListModel; 
+    DefaultListModel finalListModel; 
     private DefaultListModel audioListModel;
     private Integer[] orderButtons = {1, 2, 3};
     private DefaultComboBoxModel orderModel;
@@ -52,6 +52,10 @@ public class ConfigurationAppGUI extends JFrame
     JButton resetBtn;
     JButton swapBtn;
     JButton saveChangesBtn;
+    JButton addFinalBtn;
+    JButton addNewBtn;
+    JButton removeNewBtn;
+    JButton removeFinalBtn;
 
     //Main method for starting the player from a command line.
     public static void main(String[] args){
@@ -145,7 +149,7 @@ public class ConfigurationAppGUI extends JFrame
     private void resume() { player.resume();}
 
     //Quit function: quit the application.
-    private void quit() {System.exit(0);}
+    public void quit() {System.exit(0);}
 
     //About function: show the 'about' box.
     private void showAbout() {
@@ -281,7 +285,7 @@ public class ConfigurationAppGUI extends JFrame
                 orderPanel.add(initialLabel);
 
                 //Add button to add new button in simulator app.
-                JButton addNewBtn = new JButton();
+                addNewBtn = new JButton();
                 ImageIcon addNewIcn = new ImageIcon("Icons/Add.png");
                 setButtonIcon(addNewBtn, addNewIcn);
                 addNewBtn.setToolTipText("Add New Button");
@@ -289,7 +293,7 @@ public class ConfigurationAppGUI extends JFrame
                 orderPanel.add(addNewBtn);
 
                 //Add remove button to new remove the last button created in simulator app.
-                JButton removeNewBtn = new JButton();
+                removeNewBtn = new JButton();
                 ImageIcon removeIcn = new ImageIcon("Icons/Remove.png");
                 setButtonIcon(removeNewBtn, removeIcn);
                 removeNewBtn.setToolTipText("Remove from Initial List");
@@ -304,7 +308,7 @@ public class ConfigurationAppGUI extends JFrame
                 orderPanel.add(finalLabel);
 
                 //Add Edit button to add audio files to final list.
-                JButton addFinalBtn = new JButton();
+                addFinalBtn = new JButton();
                 ImageIcon addFinalIcn = new ImageIcon("Icons/Add.png");
                 setButtonIcon(addFinalBtn, addFinalIcn);
                 addFinalBtn.setToolTipText("Add to Final List");
@@ -312,7 +316,7 @@ public class ConfigurationAppGUI extends JFrame
                 orderPanel.add(addFinalBtn);
 
                 //Add remove button to new remove the last button created in simulator app.
-                JButton removeFinalBtn = new JButton();
+                removeFinalBtn = new JButton();
                 ImageIcon removeFinalIcn = new ImageIcon("Icons/Remove.png");
                 setButtonIcon(removeFinalBtn, removeFinalIcn);
                 removeFinalBtn.setToolTipText("Remove from Final List");
@@ -620,7 +624,7 @@ public class ConfigurationAppGUI extends JFrame
             JOptionPane.showMessageDialog(null, "Sorry, you can't remove more buttons");
     }
     //Added functionality to save changes.
-    private void saveChanges() {
+    public void saveChanges() {
         if(finalListModel.isEmpty() || finalListModel.size() < initialListModel.size() ) {
             JOptionPane.showMessageDialog(null, "Sorry, number of buttons should be " +
                     "equal to the number of files in final list");
@@ -645,7 +649,7 @@ public class ConfigurationAppGUI extends JFrame
             System.out.println(data.relativePathToAudioFiles);
             data.audioFileNames = this.getAudioFileNames();
             System.out.println(Arrays.deepToString(data.audioFileNames).replace("], ", "]\n"));
-            try {
+            try {           	
                 ResourceManager.save(data, fileName);
             }
             catch (Exception e)
