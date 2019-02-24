@@ -656,6 +656,7 @@ public class ConfigurationAppGUI extends JFrame
             }
             catch (Exception e)
             {
+            	System.out.println("EXCEPTION IS BEING THROWN HERE");
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
             initialListModel.removeAllElements();
