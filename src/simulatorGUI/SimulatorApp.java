@@ -21,13 +21,13 @@ public class SimulatorApp extends JFrame
 	private static final String fileName = "TalkBoxConfig.txt";
 
 	private SoundEngine player;
-	JButton[] audioButtons;
-	JButton[] swapButtons;
+	public JButton[] audioButtons;
+	public JButton[] swapButtons;
 	JList finalAudioList;
 	int numberOfAudioButtons;
 	int numberOfAudioSets;
 	int totalNumberOfButtons;
-	String[][] audioFileNames;
+	public String[][] audioFileNames;
 
 	public static void main(String[] args) 
 	{
@@ -108,17 +108,17 @@ public class SimulatorApp extends JFrame
 
 	@Override
 	public int getNumberOfAudioButtons() {
-		return 0;
+		return numberOfAudioButtons;
 	}
 
 	@Override
 	public int getNumberOfAudioSets() {
-		return 0;
+		return numberOfAudioSets;
 	}
 
 	@Override
 	public int getTotalNumberOfButtons() {
-		return 0;
+		return totalNumberOfButtons;
 	}
 
 	@Override
@@ -128,6 +128,6 @@ public class SimulatorApp extends JFrame
 
 	@Override
 	public String[][] getAudioFileNames() {
-		return new String[0][];
+		return audioFileNames;
 	}
 }

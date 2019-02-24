@@ -56,6 +56,8 @@ public class ConfigurationAppGUI extends JFrame
     JButton addNewBtn;
     JButton removeNewBtn;
     JButton removeFinalBtn;
+    JButton launchSimApp;
+    SimulatorApp myFrame;
 
     //Main method for starting the player from a command line.
     public static void main(String[] args){
@@ -344,12 +346,12 @@ public class ConfigurationAppGUI extends JFrame
 //                });
 //                orderPanel.add(recordBtn);
                 // Add button to launch Simulator App
-                JButton launchSimApp = new JButton();
+                launchSimApp = new JButton();
                 ImageIcon launchIcn = new ImageIcon("Icons/Launch.png");
                 setButtonIcon(launchSimApp, launchIcn);
                 launchSimApp.setToolTipText("Launch Simulator");
                 launchSimApp.addActionListener(e ->  {
-                    SimulatorApp myFrame = new SimulatorApp();
+                    myFrame = new SimulatorApp();
                     myFrame.setVisible(true);
                     myFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                 });
