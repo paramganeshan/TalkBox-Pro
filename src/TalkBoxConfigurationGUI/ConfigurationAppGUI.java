@@ -65,7 +65,7 @@ public class ConfigurationAppGUI extends JFrame
     //Main method for starting the player from a command line.
     public static void main(String[] args){
         ConfigurationAppGUI gui = new ConfigurationAppGUI();
-    }
+    } 
 
     //Create a TalkBox and display its GUI on screen.
     public ConfigurationAppGUI() {
@@ -348,7 +348,7 @@ public class ConfigurationAppGUI extends JFrame
                 launchSimApp.setToolTipText("Launch Simulator");
                 launchSimApp.addActionListener(e ->  {
                     if(sounds.exists()) {
-                        SimulatorApp myFrame = new SimulatorApp();
+                        myFrame = new SimulatorApp();
                         myFrame.setVisible(true);
                         myFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                     }
@@ -590,7 +590,7 @@ public class ConfigurationAppGUI extends JFrame
         order.removeAllItems();
         for(int i = 1; i <= orderButtons.length; i++) {
             initialListModel.addElement(audioFiles[i - 1]);
-            finalListModel.addElement(audioFiles[i - 1]);
+            //finalListModel.addElement(audioFiles[i - 1]);
             orderModel.addElement(i);
         }
     }

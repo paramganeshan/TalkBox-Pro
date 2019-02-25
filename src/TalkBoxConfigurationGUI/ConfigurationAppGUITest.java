@@ -21,7 +21,7 @@ class ConfigurationAppGUITest {
 		Thread.sleep(100);
 		gui = new ConfigurationAppGUI();
 		Thread.sleep(100);
-	}
+	} 
 
 	/**
 	 * Testing the findFiles method from the ConfigurationAppGUI.java class. Checks
@@ -71,7 +71,6 @@ class ConfigurationAppGUITest {
 	 * @throws InterruptedException
 	 */
 
-	@Disabled
 	@Test
 	public void testClickPlayButton() throws InterruptedException {
 		Thread.sleep(1000);
